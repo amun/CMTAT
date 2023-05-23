@@ -423,7 +423,7 @@ abstract contract SnapshotModuleInternal is ERC20Upgradeable {
         ) {
             return (0, currentArraySize);
         }
-        uint256 mostRecent = 0;
+        uint256 mostRecent;
         index = currentArraySize;
         for (uint256 i = _currentSnapshotIndex; i < currentArraySize;) {
             if (_scheduledSnapshots[i] <= block.timestamp) {
