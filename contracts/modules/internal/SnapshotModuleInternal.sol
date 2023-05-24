@@ -109,7 +109,7 @@ abstract contract SnapshotModuleInternal is ERC20Upgradeable {
             _scheduledSnapshots.push(
                 _scheduledSnapshots[_scheduledSnapshots.length - 1]
             );
-            for (uint256 i = _scheduledSnapshots.length - 2; i > index; ) {
+            for (uint256 i = _scheduledSnapshots.length - 2; i > index;) {
                 _scheduledSnapshots[i] = _scheduledSnapshots[i - 1];
                 unchecked {
                     --i;
@@ -177,7 +177,7 @@ abstract contract SnapshotModuleInternal is ERC20Upgradeable {
         require(time > block.timestamp, "Snapshot already done");
         (bool isFound, uint256 index) = _findScheduledSnapshotIndex(time);
         require(isFound, "Snapshot not found");
-        for (uint256 i = index; i + 1 < _scheduledSnapshots.length; ) {
+        for (uint256 i = index; i + 1 < _scheduledSnapshots.length;) {
             _scheduledSnapshots[i] = _scheduledSnapshots[i + 1];
             unchecked {
                 ++i;
@@ -209,7 +209,7 @@ abstract contract SnapshotModuleInternal is ERC20Upgradeable {
                         indexLowerBound -
                         1;
                     nextScheduledSnapshot = new uint256[](arraySize);
-                    for (uint256 i; i < nextScheduledSnapshot.length;) {
+                    for (uint256 i; i < arraySize;) {
                         nextScheduledSnapshot[i] = _scheduledSnapshots[
                             indexLowerBound + 1 + i
                         ];
@@ -389,20 +389,21 @@ abstract contract SnapshotModuleInternal is ERC20Upgradeable {
         uint256 time
     ) private view returns (bool, uint256) {
         uint256 indexFound = _scheduledSnapshots.findUpperBound(time);
+        uint256 _scheduledSnapshotsLength = _scheduledSnapshots.length;
         // Exact match
         if (
-            indexFound != _scheduledSnapshots.length &&
+            indexFound != _scheduledSnapshotsLength &&
             _scheduledSnapshots[indexFound] == time
         ) {
             return (true, indexFound);
         }
         // Upper bound match
-        else if (indexFound != _scheduledSnapshots.length) {
+        else if (indexFound != _scheduledSnapshotsLength) {
             return (false, indexFound);
         }
         // no match
         else {
-            return (false, _scheduledSnapshots.length);
+            return (false, _scheduledSnapshotsLength);
         }
     }
 
