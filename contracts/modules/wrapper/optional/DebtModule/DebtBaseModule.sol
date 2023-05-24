@@ -7,6 +7,8 @@ import "../../../../../openzeppelin-contracts-upgradeable/contracts/proxy/utils/
 import "../../../../interfaces/IDebtGlobal.sol";
 import "../../../security/AuthorizationModule.sol";
 
+import { SameValue } from  "../../../../libraries/Errors.sol";
+
 abstract contract DebtBaseModule is
     IDebtGlobal,
     Initializable,
@@ -131,7 +133,7 @@ abstract contract DebtBaseModule is
     @notice The call will be reverted if the new value of interestRate is the same as the current one
     */
     function setInterestRate(uint256 interestRate_) public onlyRole(DEBT_ROLE) {
-        require(debt.interestRate != interestRate_, "Same value");
+        if(interestRate_ == debt.interestRate) revert SameValue();
         debt.interestRate = interestRate_;
         emit InterestRate(interestRate_);
     }
@@ -140,7 +142,7 @@ abstract contract DebtBaseModule is
     @notice The call will be reverted if the new value of parValue is the same as the current one
     */
     function setParValue(uint256 parValue_) public onlyRole(DEBT_ROLE) {
-        require(debt.parValue != parValue_, "Same value");
+        if(parValue_ == debt.parValue) revert SameValue();
         debt.parValue = parValue_;
         emit ParValue(parValue_);
     }
