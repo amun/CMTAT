@@ -6,7 +6,7 @@ pragma solidity ^0.8.17;
 import "../../../../openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol";
 import "../../../../openzeppelin-contracts-upgradeable/contracts/token/ERC20/ERC20Upgradeable.sol";
 
-import { Allowance } from "../../../libraries/Errors.sol";
+import "../../../libraries/Errors.sol";
 
 abstract contract ERC20BaseModule is ERC20Upgradeable {
     /* Events */
@@ -99,7 +99,7 @@ abstract contract ERC20BaseModule is ERC20Upgradeable {
         uint256 amount,
         uint256 currentAllowance
     ) public virtual returns (bool) {
-        if(allowance(_msgSender(), spender) != currentAllowance) revert Allowance(allowance(_msgSender(), spender), currentAllowance);
+        if(allowance(_msgSender(), spender) != currentAllowance) revert Errors.Allowance(allowance(_msgSender(), spender), currentAllowance);
         super.approve(spender, amount);
         return true;
     }

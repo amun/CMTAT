@@ -24,7 +24,7 @@ import "../../modules/wrapper/optional/DebtModule/CreditEventsModule.sol";
 import "../../modules/security/AuthorizationModule.sol";
 import "../../interfaces/IEIP1404/IEIP1404Wrapper.sol";
 
-import { BeforeTokenTransfer } from  "../../libraries/Errors.sol";
+import "../../libraries/Errors.sol";
 
 abstract contract CMTAT_BASE_SnapshotTest is
     Initializable,
@@ -171,7 +171,7 @@ abstract contract CMTAT_BASE_SnapshotTest is
         address to,
         uint256 amount
     ) internal override(SnapshotModuleInternal, ERC20Upgradeable) {
-        if(!ValidationModule.validateTransfer(from, to, amount)) revert BeforeTokenTransfer(from, to, amount);
+        if(!ValidationModule.validateTransfer(from, to, amount)) revert Errors.BeforeTokenTransfer(from, to, amount);
         // We call the SnapshotModule only if the transfer is valid
         /*
         SnapshotModule:

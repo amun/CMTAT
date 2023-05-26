@@ -7,7 +7,7 @@ import "../../../../../openzeppelin-contracts-upgradeable/contracts/proxy/utils/
 import "../../../../interfaces/IDebtGlobal.sol";
 import "../../../security/AuthorizationModule.sol";
 
-import { SameValue } from  "../../../../libraries/Errors.sol";
+import "../../../../libraries/Errors.sol";
 
 abstract contract CreditEventsModule is
     IDebtGlobal,
@@ -64,7 +64,7 @@ abstract contract CreditEventsModule is
     function setFlagDefault(
         bool flagDefault_
     ) public onlyRole(DEBT_CREDIT_EVENT_ROLE) {
-        if(flagDefault_ == creditEvents.flagDefault) revert SameValue();
+        if(flagDefault_ == creditEvents.flagDefault) revert Errors.SameValue();
         creditEvents.flagDefault = flagDefault_;
         emit FlagDefault(flagDefault_);
     }
@@ -75,7 +75,7 @@ abstract contract CreditEventsModule is
     function setFlagRedeemed(
         bool flagRedeemed_
     ) public onlyRole(DEBT_CREDIT_EVENT_ROLE) {
-        if(flagRedeemed_ == creditEvents.flagRedeemed) revert SameValue();
+        if(flagRedeemed_ == creditEvents.flagRedeemed) revert Errors.SameValue();
         creditEvents.flagRedeemed = flagRedeemed_;
         emit FlagRedeemed(flagRedeemed_);
     }

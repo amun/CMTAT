@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.17;
 
-import { DirectCallToImplementation } from  "../../libraries/Errors.sol";
+import "../../libraries/Errors.sol";
 
 /**
 @dev When a contract is deployed with a proxy, insure that some functions (e.g. delegatecall and selfdestruct) can only be triggered through proxies 
@@ -13,7 +13,7 @@ abstract contract OnlyDelegateCallModule {
     address private immutable self = address(this);
 
     function checkDelegateCall() private view {
-        if(address(this) == self) revert DirectCallToImplementation();
+        if(address(this) == self) revert Errors.DirectCallToImplementation();
     }
 
     modifier onlyDelegateCall(bool deployedWithProxy) {

@@ -5,7 +5,7 @@ pragma solidity ^0.8.17;
 import "../../../openzeppelin-contracts-upgradeable/contracts/access/AccessControlUpgradeable.sol";
 import "../../../openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol";
 
-import { InvalidAddress } from "../../libraries/Errors.sol";
+import "../../libraries/Errors.sol";
 
 abstract contract AuthorizationModule is AccessControlUpgradeable {
     // BurnModule
@@ -45,7 +45,7 @@ abstract contract AuthorizationModule is AccessControlUpgradeable {
     function __AuthorizationModule_init_unchained(
         address admin
     ) internal onlyInitializing {
-        if(admin == address(0)) revert InvalidAddress();
+        if(admin == address(0)) revert Errors.InvalidAddress();
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
     }
 

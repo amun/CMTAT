@@ -21,7 +21,7 @@ import "../../modules/security/AuthorizationModule.sol";
 import "../../modules/security/OnlyDelegateCallModule.sol";
 import "../../interfaces/IEIP1404/IEIP1404Wrapper.sol";
 
-import { BeforeTokenTransfer } from  "../../libraries/Errors.sol";
+import "../../libraries/Errors.sol";
 
 /**
 @title A CMTAT version only for TESTING
@@ -185,7 +185,7 @@ contract CMTAT_KILL_TEST is
         address to,
         uint256 amount
     ) internal view override(ERC20Upgradeable) {
-        if(!ValidationModule.validateTransfer(from, to, amount)) revert BeforeTokenTransfer(from, to, amount);
+        if(!ValidationModule.validateTransfer(from, to, amount)) revert Errors.BeforeTokenTransfer(from, to, amount);
         // We call the SnapshotModule only if the transfer is valid
         /*
         SnapshotModule:

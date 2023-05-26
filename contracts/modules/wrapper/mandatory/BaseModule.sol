@@ -7,7 +7,7 @@ import "../../../../openzeppelin-contracts-upgradeable/contracts/proxy/utils/Ini
 import "../../security/AuthorizationModule.sol";
 import "../../security/OnlyDelegateCallModule.sol";
 
-import { SameValue } from "../../../libraries/Errors.sol";
+import "../../../libraries/Errors.sol";
 
 abstract contract BaseModule is AuthorizationModule, OnlyDelegateCallModule {
     // to initialize inside the implementation constructor when deployed with a Proxy
@@ -103,7 +103,7 @@ abstract contract BaseModule is AuthorizationModule, OnlyDelegateCallModule {
     @notice The call will be reverted if the new value of flag is the same as the current one
     */
     function setFlag(uint256 flag_) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        if(flag == flag_) revert SameValue();
+        if(flag == flag_) revert Errors.SameValue();
         flag = flag_;
         emit Flag(flag_);
     }
