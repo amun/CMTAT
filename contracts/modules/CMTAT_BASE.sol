@@ -14,8 +14,7 @@ import "./wrapper/mandatory/ERC20BaseModule.sol";
 /*
 SnapshotModule:
 Add this import in case you add the SnapshotModule
-import "./wrapper/optional/SnapshotModule.sol";
-*/
+import "./wrapper/optional/SnapshotModule.sol";*/
 import "./wrapper/mandatory/PauseModule.sol";
 import "./wrapper/optional/ValidationModule.sol";
 import "./wrapper/optional/MetaTxModule.sol";
@@ -42,10 +41,10 @@ abstract contract CMTAT_BASE is
     CreditEventsModule
 {
     /**
-    @notice 
-    initialize the proxy contract
-    The calls to this function will revert if the contract was deployed without a proxy
-    */
+     * @notice 
+     * initialize the proxy contract
+     * The calls to this function will revert if the contract was deployed without a proxy
+     */
     function initialize(
         address admin,
         string memory nameIrrevocable,
@@ -56,21 +55,12 @@ abstract contract CMTAT_BASE is
         string memory information_,
         uint256 flag_
     ) public initializer {
-        __CMTAT_init(
-            admin,
-            nameIrrevocable,
-            symbolIrrevocable,
-            tokenId_,
-            terms_,
-            ruleEngine_,
-            information_,
-            flag_
-        );
+        __CMTAT_init(admin, nameIrrevocable, symbolIrrevocable, tokenId_, terms_, ruleEngine_, information_, flag_);
     }
 
     /**
-    @dev calls the different initialize functions from the different modules
-    */
+     * @dev calls the different initialize functions from the different modules
+     */
     function __CMTAT_init(
         address admin,
         string memory nameIrrevocable,
@@ -132,23 +122,13 @@ abstract contract CMTAT_BASE is
     }
 
     /**
-    @notice Returns the number of decimals used to get its user representation.
-    */
-    function decimals()
-        public
-        view
-        virtual
-        override(ERC20Upgradeable, ERC20BaseModule)
-        returns (uint8)
-    {
+     * @notice Returns the number of decimals used to get its user representation.
+     */
+    function decimals() public view virtual override(ERC20Upgradeable, ERC20BaseModule) returns (uint8) {
         return ERC20BaseModule.decimals();
     }
 
-    function transferFrom(
-        address sender,
-        address recipient,
-        uint256 amount
-    )
+    function transferFrom(address sender, address recipient, uint256 amount)
         public
         virtual
         override(ERC20Upgradeable, ERC20BaseModule)
@@ -164,12 +144,8 @@ abstract contract CMTAT_BASE is
     e.g. override(SnapshotModuleInternal, ERC20Upgradeable)
     - remove the keyword view
     */
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256 amount
-    ) internal view override(ERC20Upgradeable) {
-        if(!ValidationModule.validateTransfer(from, to, amount)) revert Errors.BeforeTokenTransfer(from, to, amount);
+    function _beforeTokenTransfer(address from, address to, uint256 amount) internal view override(ERC20Upgradeable) {
+        if (!ValidationModule.validateTransfer(from, to, amount)) revert Errors.InvalidTransfer(from, to, amount);
         // We call the SnapshotModule only if the transfer is valid
         /*
         SnapshotModule:
@@ -178,27 +154,17 @@ abstract contract CMTAT_BASE is
         */
     }
 
-    /** 
-    @dev This surcharge is not necessary if you do not use the MetaTxModule
-    */
-    function _msgSender()
-        internal
-        view
-        override(MetaTxModule, ContextUpgradeable)
-        returns (address sender)
-    {
+    /**
+     * @dev This surcharge is not necessary if you do not use the MetaTxModule
+     */
+    function _msgSender() internal view override(MetaTxModule, ContextUpgradeable) returns (address sender) {
         return MetaTxModule._msgSender();
     }
 
-    /** 
-    @dev This surcharge is not necessary if you do not use the MetaTxModule
-    */
-    function _msgData()
-        internal
-        view
-        override(MetaTxModule, ContextUpgradeable)
-        returns (bytes calldata)
-    {
+    /**
+     * @dev This surcharge is not necessary if you do not use the MetaTxModule
+     */
+    function _msgData() internal view override(MetaTxModule, ContextUpgradeable) returns (bytes calldata) {
         return MetaTxModule._msgData();
     }
 

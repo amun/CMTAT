@@ -22,11 +22,10 @@ abstract contract ERC20BaseModule is ERC20Upgradeable {
      * All two of these values are immutable: they can only be set once during
      * construction.
      */
-    function __ERC20Module_init(
-        string memory name_,
-        string memory symbol_,
-        uint8 decimals_
-    ) internal onlyInitializing {
+    function __ERC20Module_init(string memory name_, string memory symbol_, uint8 decimals_)
+        internal
+        onlyInitializing
+    {
         /* OpenZeppelin */
         __Context_init_unchained();
         __ERC20_init(name_, symbol_);
@@ -35,9 +34,7 @@ abstract contract ERC20BaseModule is ERC20Upgradeable {
         __ERC20Module_init_unchained(decimals_);
     }
 
-    function __ERC20Module_init_unchained(
-        uint8 decimals_
-    ) internal onlyInitializing {
+    function __ERC20Module_init_unchained(uint8 decimals_) internal onlyInitializing {
         _decimals = decimals_;
     }
 
@@ -73,11 +70,7 @@ abstract contract ERC20BaseModule is ERC20Upgradeable {
      * - the caller must have allowance for ``sender``'s tokens of at least
      * `amount`.
      */
-    function transferFrom(
-        address sender,
-        address recipient,
-        uint256 amount
-    ) public virtual override returns (bool) {
+    function transferFrom(address sender, address recipient, uint256 amount) public virtual override returns (bool) {
         bool result = super.transferFrom(sender, recipient, amount);
         // The result will be normally always true because OpenZeppelin uses require to check all the conditions.
         if (result) {
@@ -94,12 +87,10 @@ abstract contract ERC20BaseModule is ERC20Upgradeable {
      *
      * - `spender` cannot be the zero address.
      */
-    function approve(
-        address spender,
-        uint256 amount,
-        uint256 currentAllowance
-    ) public virtual returns (bool) {
-        if(allowance(_msgSender(), spender) != currentAllowance) revert Errors.Allowance(allowance(_msgSender(), spender), currentAllowance);
+    function approve(address spender, uint256 amount, uint256 currentAllowance) public virtual returns (bool) {
+        if (allowance(_msgSender(), spender) != currentAllowance) {
+            revert Errors.WrongAllowance(allowance(_msgSender(), spender), currentAllowance);
+        }
         super.approve(spender, amount);
         return true;
     }
