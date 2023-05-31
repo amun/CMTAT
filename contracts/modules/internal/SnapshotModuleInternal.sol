@@ -83,11 +83,11 @@ abstract contract SnapshotModuleInternal is ERC20Upgradeable {
     */
     function _scheduleSnapshot(uint256 time) internal {
         // Check the time firstly to avoid an useless read of storage
-        if(!(time > block.timestamp)) revert Errors.SnapshotScheduledInThePast(time, block.timestamp);
+        if(time <= block.timestamp) revert Errors.SnapshotScheduledInThePast(time, block.timestamp);
 
         if (_scheduledSnapshots.length > 0) {
             // We check the last snapshot on the list
-            if(!(time > _scheduledSnapshots[_scheduledSnapshots.length - 1])) {
+            if(time <= _scheduledSnapshots[_scheduledSnapshots.length - 1]) {
                 revert Errors.SnapshotTimestampBeforeLastSnapshot(time, _scheduledSnapshots[_scheduledSnapshots.length - 1]);
             }
         }
@@ -99,7 +99,7 @@ abstract contract SnapshotModuleInternal is ERC20Upgradeable {
     @dev schedule a snapshot at the specified time
     */
     function _scheduleSnapshotNotOptimized(uint256 time) internal {
-        if(!(time > block.timestamp)) revert Errors.SnapshotScheduledInThePast(time, block.timestamp);
+        if(time <= block.timestamp)) revert Errors.SnapshotScheduledInThePast(time, block.timestamp);
         (bool isFound, uint256 index) = _findScheduledSnapshotIndex(time);
         // Perfect match
         if(isFound) revert Errors.SnapshotAlreadyExists();
@@ -126,19 +126,19 @@ abstract contract SnapshotModuleInternal is ERC20Upgradeable {
     */
     function _rescheduleSnapshot(uint256 oldTime, uint256 newTime) internal {
         // Check the time firstly to avoid an useless read of storage
-        if(!(oldTime > block.timestamp)) revert Errors.SnapshotAlreadyDone();
-        if(!(newTime > block.timestamp)) revert Errors.SnapshotScheduledInThePast(newTime, block.timestamp);
-        if(_scheduledSnapshots.length == 0) revert Errors.NoScheduledSnapshot();
+        if(oldTime <= block.timestamp) revert Errors.SnapshotAlreadyDone();
+        if(newTime <= block.timestamp) revert Errors.SnapshotScheduledInThePast(newTime, block.timestamp);
+        if(_scheduledSnapshots.length == 0) revert Errors.SnapshotNotScheduled();
 
         (bool foundOld, uint256 index) = _findScheduledSnapshotIndex(oldTime);
         if(!foundOld) revert Errors.SnapshotNotFound();
 
         if (index + 1 < _scheduledSnapshots.length) {
-            if(!(newTime < _scheduledSnapshots[index + 1])) revert Errors.SnapshotTimestampAfterNextSnapshot(newTime, _scheduledSnapshots[index + 1]);
+            if(newTime >= _scheduledSnapshots[index + 1]) revert Errors.SnapshotTimestampAfterNextSnapshot(newTime, _scheduledSnapshots[index + 1]);
         }
 
         if (index > 0) {
-            if(!(newTime > _scheduledSnapshots[index - 1])) revert Errors.SnapshotTimestampBeforePreviousSnapshot(newTime, _scheduledSnapshots[index - 1]);
+            if(newTime <= _scheduledSnapshots[index - 1]) revert Errors.SnapshotTimestampBeforePreviousSnapshot(newTime, _scheduledSnapshots[index - 1]);
         }
 
         _scheduledSnapshots[index] = newTime;
@@ -151,10 +151,10 @@ abstract contract SnapshotModuleInternal is ERC20Upgradeable {
     */
     function _unscheduleLastSnapshot(uint256 time) internal {
         // Check the time firstly to avoid an useless read of storage
-        if(!(time > block.timestamp)) revert Errors.SnapshotAlreadyDone();
-        if(_scheduledSnapshots.length == 0) revert Errors.NoScheduledSnapshot();
+        if(time <= block.timestamp)) revert Errors.SnapshotAlreadyDone();
+        if(_scheduledSnapshots.length == 0) revert Errors.SnapshotNotScheduled();
         // All snapshot time are unique, so we do not check the indice
-        if(time != _scheduledSnapshots[_scheduledSnapshots.length - 1]) revert Errors.NotLastSnapshot();
+        if(time != _scheduledSnapshots[_scheduledSnapshots.length - 1]) revert Errors.SnapshotNeverScheduled();
         _scheduledSnapshots.pop();
         emit SnapshotUnschedule(time);
     }
@@ -166,7 +166,7 @@ abstract contract SnapshotModuleInternal is ERC20Upgradeable {
     - Reduce the array size by deleting the last snapshot
     */
     function _unscheduleSnapshotNotOptimized(uint256 time) internal {
-        if(!(time > block.timestamp)) revert Errors.SnapshotAlreadyDone();
+        if(time <= block.timestamp)) revert Errors.SnapshotAlreadyDone();
         (bool isFound, uint256 index) = _findScheduledSnapshotIndex(time);
         if(!isFound) revert Errors.SnapshotNotFound();
         for (uint256 i = index; i + 1 < _scheduledSnapshots.length;) {
