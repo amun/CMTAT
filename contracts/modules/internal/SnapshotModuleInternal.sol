@@ -151,7 +151,7 @@ abstract contract SnapshotModuleInternal is ERC20Upgradeable {
     */
     function _unscheduleLastSnapshot(uint256 time) internal {
         // Check the time firstly to avoid an useless read of storage
-        if(time <= block.timestamp)) revert Errors.SnapshotAlreadyDone();
+        if(time <= block.timestamp) revert Errors.SnapshotAlreadyDone();
         if(_scheduledSnapshots.length == 0) revert Errors.SnapshotNotScheduled();
         // All snapshot time are unique, so we do not check the indice
         if(time != _scheduledSnapshots[_scheduledSnapshots.length - 1]) revert Errors.SnapshotNeverScheduled();
@@ -166,7 +166,7 @@ abstract contract SnapshotModuleInternal is ERC20Upgradeable {
     - Reduce the array size by deleting the last snapshot
     */
     function _unscheduleSnapshotNotOptimized(uint256 time) internal {
-        if(time <= block.timestamp)) revert Errors.SnapshotAlreadyDone();
+        if(time <= block.timestamp) revert Errors.SnapshotAlreadyDone();
         (bool isFound, uint256 index) = _findScheduledSnapshotIndex(time);
         if(!isFound) revert Errors.SnapshotNotFound();
         for (uint256 i = index; i + 1 < _scheduledSnapshots.length;) {
