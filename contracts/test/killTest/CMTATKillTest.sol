@@ -48,7 +48,9 @@ contract CMTAT_KILL_TEST is
      * @param forwarderIrrevocable address of the forwarder, required for the gasless support
      */
     /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor(address forwarderIrrevocable) MetaTxModule(forwarderIrrevocable) {
+    constructor(
+        address forwarderIrrevocable
+    ) MetaTxModule(forwarderIrrevocable) {
         // Initialize the variable for the implementation
         deployedWithProxy = true;
         // Disable the possibility to initialize the implementation
@@ -56,7 +58,7 @@ contract CMTAT_KILL_TEST is
     }
 
     /**
-     * @notice 
+     * @notice
      * initialize the proxy contract
      * The calls to this function will revert if the contract was deployed without a proxy
      */
@@ -70,7 +72,16 @@ contract CMTAT_KILL_TEST is
         string memory information,
         uint256 flag
     ) public initializer {
-        __CMTAT_init(admin, nameIrrevocable, symbolIrrevocable, tokenId, terms, ruleEngine, information, flag);
+        __CMTAT_init(
+            admin,
+            nameIrrevocable,
+            symbolIrrevocable,
+            tokenId,
+            terms,
+            ruleEngine,
+            information,
+            flag
+        );
     }
 
     /**
@@ -139,11 +150,21 @@ contract CMTAT_KILL_TEST is
     /**
      * @notice Returns the number of decimals used to get its user representation.
      */
-    function decimals() public view virtual override(ERC20Upgradeable, ERC20BaseModule) returns (uint8) {
+    function decimals()
+        public
+        view
+        virtual
+        override(ERC20Upgradeable, ERC20BaseModule)
+        returns (uint8)
+    {
         return ERC20BaseModule.decimals();
     }
 
-    function transferFrom(address sender, address recipient, uint256 amount)
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    )
         public
         virtual
         override(ERC20Upgradeable, ERC20BaseModule)
@@ -159,8 +180,13 @@ contract CMTAT_KILL_TEST is
     e.g. override(SnapshotModuleInternal, ERC20Upgradeable)
     - remove the keyword view
     */
-    function _beforeTokenTransfer(address from, address to, uint256 amount) internal view override(ERC20Upgradeable) {
-        if (!ValidationModule.validateTransfer(from, to, amount)) revert Errors.InvalidTransfer(from, to, amount);
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 amount
+    ) internal view override(ERC20Upgradeable) {
+        if (!ValidationModule.validateTransfer(from, to, amount))
+            revert Errors.InvalidTransfer(from, to, amount);
         // We call the SnapshotModule only if the transfer is valid
         /*
         SnapshotModule:
@@ -172,14 +198,24 @@ contract CMTAT_KILL_TEST is
     /**
      * @dev This surcharge is not necessary if you do not use the MetaTxModule
      */
-    function _msgSender() internal view override(MetaTxModule, ContextUpgradeable) returns (address sender) {
+    function _msgSender()
+        internal
+        view
+        override(MetaTxModule, ContextUpgradeable)
+        returns (address sender)
+    {
         return MetaTxModule._msgSender();
     }
 
     /**
      * @dev This surcharge is not necessary if you do not use the MetaTxModule
      */
-    function _msgData() internal view override(MetaTxModule, ContextUpgradeable) returns (bytes calldata) {
+    function _msgData()
+        internal
+        view
+        override(MetaTxModule, ContextUpgradeable)
+        returns (bytes calldata)
+    {
         return MetaTxModule._msgData();
     }
 
