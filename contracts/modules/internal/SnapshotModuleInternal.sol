@@ -99,7 +99,7 @@ abstract contract SnapshotModuleInternal is ERC20Upgradeable {
     @dev schedule a snapshot at the specified time
     */
     function _scheduleSnapshotNotOptimized(uint256 time) internal {
-        if(time <= block.timestamp)) revert Errors.SnapshotScheduledInThePast(time, block.timestamp);
+        if(time <= block.timestamp) revert Errors.SnapshotScheduledInThePast(time, block.timestamp);
         (bool isFound, uint256 index) = _findScheduledSnapshotIndex(time);
         // Perfect match
         if(isFound) revert Errors.SnapshotAlreadyExists();
