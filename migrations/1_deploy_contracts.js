@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const CMTAT_PROXY = artifacts.require("CMTAT_PROXY")
 const { deployProxy } = require("@openzeppelin/truffle-upgrades")
 const { Address } = require("ethereumjs-util")
@@ -8,7 +10,7 @@ module.exports = async function (deployer) {
   const proxyContract = await deployProxy(
     CMTAT_PROXY,
 		[
-			"0x73E3552Cdbe9F4F38A1dDf1262b87Aa208d2225C",
+			process.env.ADMIN_ADDRESS,
 			"Test CMTA Token",
 			"TCMTAT",
 			"TCMTAT_ISIN",
