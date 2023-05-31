@@ -24,9 +24,9 @@ import "../../interfaces/IEIP1404/IEIP1404Wrapper.sol";
 import "../../libraries/Errors.sol";
 
 /**
-@title A CMTAT version only for TESTING
-@dev This version inherits from BaseModuleTest instead of BaseModule
-*/
+ * @title A CMTAT version only for TESTING
+ * @dev This version inherits from BaseModuleTest instead of BaseModule
+ */
 contract CMTAT_KILL_TEST is
     Initializable,
     ContextUpgradeable,
@@ -43,14 +43,12 @@ contract CMTAT_KILL_TEST is
     CreditEventsModule
 {
     // CMTAT_PROXY constructor
-    /** 
-    @notice Contract version for the deployment with a proxy
-    @param forwarderIrrevocable address of the forwarder, required for the gasless support
-    */
+    /**
+     * @notice Contract version for the deployment with a proxy
+     * @param forwarderIrrevocable address of the forwarder, required for the gasless support
+     */
     /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor(
-        address forwarderIrrevocable
-    ) MetaTxModule(forwarderIrrevocable) {
+    constructor(address forwarderIrrevocable) MetaTxModule(forwarderIrrevocable) {
         // Initialize the variable for the implementation
         deployedWithProxy = true;
         // Disable the possibility to initialize the implementation
@@ -58,10 +56,10 @@ contract CMTAT_KILL_TEST is
     }
 
     /**
-    @notice 
-    initialize the proxy contract
-    The calls to this function will revert if the contract was deployed without a proxy
-    */
+     * @notice 
+     * initialize the proxy contract
+     * The calls to this function will revert if the contract was deployed without a proxy
+     */
     function initialize(
         address admin,
         string memory nameIrrevocable,
@@ -72,21 +70,12 @@ contract CMTAT_KILL_TEST is
         string memory information,
         uint256 flag
     ) public initializer {
-        __CMTAT_init(
-            admin,
-            nameIrrevocable,
-            symbolIrrevocable,
-            tokenId,
-            terms,
-            ruleEngine,
-            information,
-            flag
-        );
+        __CMTAT_init(admin, nameIrrevocable, symbolIrrevocable, tokenId, terms, ruleEngine, information, flag);
     }
 
     /**
-    @dev calls the different initialize functions from the different modules
-    */
+     * @dev calls the different initialize functions from the different modules
+     */
     function __CMTAT_init(
         address admin,
         string memory nameIrrevocable,
@@ -148,23 +137,13 @@ contract CMTAT_KILL_TEST is
     }
 
     /**
-    @notice Returns the number of decimals used to get its user representation.
-    */
-    function decimals()
-        public
-        view
-        virtual
-        override(ERC20Upgradeable, ERC20BaseModule)
-        returns (uint8)
-    {
+     * @notice Returns the number of decimals used to get its user representation.
+     */
+    function decimals() public view virtual override(ERC20Upgradeable, ERC20BaseModule) returns (uint8) {
         return ERC20BaseModule.decimals();
     }
 
-    function transferFrom(
-        address sender,
-        address recipient,
-        uint256 amount
-    )
+    function transferFrom(address sender, address recipient, uint256 amount)
         public
         virtual
         override(ERC20Upgradeable, ERC20BaseModule)
@@ -180,12 +159,8 @@ contract CMTAT_KILL_TEST is
     e.g. override(SnapshotModuleInternal, ERC20Upgradeable)
     - remove the keyword view
     */
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256 amount
-    ) internal view override(ERC20Upgradeable) {
-        if(!ValidationModule.validateTransfer(from, to, amount)) revert Errors.InvalidTransfer(from, to, amount);
+    function _beforeTokenTransfer(address from, address to, uint256 amount) internal view override(ERC20Upgradeable) {
+        if (!ValidationModule.validateTransfer(from, to, amount)) revert Errors.InvalidTransfer(from, to, amount);
         // We call the SnapshotModule only if the transfer is valid
         /*
         SnapshotModule:
@@ -194,27 +169,17 @@ contract CMTAT_KILL_TEST is
         */
     }
 
-    /** 
-    @dev This surcharge is not necessary if you do not use the MetaTxModule
-    */
-    function _msgSender()
-        internal
-        view
-        override(MetaTxModule, ContextUpgradeable)
-        returns (address sender)
-    {
+    /**
+     * @dev This surcharge is not necessary if you do not use the MetaTxModule
+     */
+    function _msgSender() internal view override(MetaTxModule, ContextUpgradeable) returns (address sender) {
         return MetaTxModule._msgSender();
     }
 
-    /** 
-    @dev This surcharge is not necessary if you do not use the MetaTxModule
-    */
-    function _msgData()
-        internal
-        view
-        override(MetaTxModule, ContextUpgradeable)
-        returns (bytes calldata)
-    {
+    /**
+     * @dev This surcharge is not necessary if you do not use the MetaTxModule
+     */
+    function _msgData() internal view override(MetaTxModule, ContextUpgradeable) returns (bytes calldata) {
         return MetaTxModule._msgData();
     }
 

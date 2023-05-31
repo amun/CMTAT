@@ -18,4 +18,3 @@ library Errors {
     error WrongAllowance(uint256 allowance, uint256 currentAllowance);
     error SameValue();
 }
-    
