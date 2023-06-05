@@ -1,7 +1,6 @@
 const { deployProxy } = require('@openzeppelin/truffle-upgrades')
 const CMTAT = artifacts.require('CMTAT_PROXY')
 const BurnModuleCommon = require('../../common/BurnModuleCommon')
-const { ZERO_ADDRESS } = require('../../utils')
 
 contract(
   'Proxy - BurnModule',

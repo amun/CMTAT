@@ -4,7 +4,6 @@ const { should } = require('chai').should()
 const { deployProxy, upgradeProxy, erc1967 } = require('@openzeppelin/truffle-upgrades')
 const CMTAT1 = artifacts.require('CMTAT_PROXY')
 const CMTAT2 = artifacts.require('CMTAT_PROXY')
-const { ZERO_ADDRESS } = require('../../utils')
 
 contract('UpgradeableCMTAT - Proxy', function ([_, admin, address1]) {
   /*

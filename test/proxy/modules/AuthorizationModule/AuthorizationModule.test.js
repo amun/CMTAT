@@ -1,7 +1,6 @@
 const CMTAT = artifacts.require('CMTAT_PROXY')
 const { deployProxy } = require('@openzeppelin/truffle-upgrades')
 const AuthorizationModuleCommon = require('../../../common/AuthorizationModule/AuthorizationModuleCommon')
-const { ZERO_ADDRESS } = require('../../../utils')
 
 contract(
   'Proxy - AuthorizationModule',
