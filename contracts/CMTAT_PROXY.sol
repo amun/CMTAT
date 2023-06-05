@@ -10,8 +10,6 @@ contract CMTAT_PROXY is CMTAT_BASE {
      */
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
-        // Initialize the variable for the implementation
-        deployedWithProxy = true;
         // Disable the possibility to initialize the implementation
         _disableInitializers();
     }
