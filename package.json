@@ -20,7 +20,7 @@
     "coverage": "npx hardhat coverage",
     "docgen": "npx hardhat docgen",
     "uml": "npx sol2uml class contracts -c",
-    "uml-partial": "npx sol2uml class contracts -c -b CMTAT_BASE && npx sol2uml class contracts -c -b CMTAT_BASE",
+    "uml-partial": "npx sol2uml class contracts -c -b CMTAT_BASE",
     "uml-modules-mandatory": "npx sol2uml class contracts -c -b BaseModule && npx sol2uml class contracts -c -b BurnModule && npx sol2uml class contracts -c -b ERC20BaseModule && npx sol2uml class contracts -c -b MintModule && npx sol2uml class contracts -c -b PauseModule",
     "uml-modules-security": "npx sol2uml class contracts -c -b AuthorizationModule",
     "uml-mocks": "npx sol2uml class -c contracts/mocks/RuleEngine",
