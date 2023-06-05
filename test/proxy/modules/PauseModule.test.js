@@ -1,5 +1,5 @@
 const { deployProxy } = require('@openzeppelin/truffle-upgrades')
-const CMTAT = artifacts.require('CMTAT_PROXY')
+const CMTAT = artifacts.require('CMTAT_BASE')
 const PauseModuleCommon = require('../../common/PauseModuleCommon')
 
 contract('Proxy - PauseModule', function ([_, admin, address1, address2, address3]) {
