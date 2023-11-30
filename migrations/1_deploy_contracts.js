@@ -10,9 +10,9 @@ module.exports = async function (deployer, _network, account) {
 		CMTAT_BASE,
 		[
 			admin,
-			"test_token",
-			"tt",
-			18,
+			"21.co Wrapped Dogecoin",
+			"21DOGE",
+			8,
 			"",
 			"",
 			"",
