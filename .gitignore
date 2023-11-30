@@ -4,7 +4,9 @@ coverage
 coverage.json
 #exception
 !doc/general/test/coverage
-# /.openzeppelin
+/.openzeppelin
+!/.openzeppelin/mainnet.json
+!/.openzeppelin/polygon.json
 .vscode/
 #PlantUML
 out
