@@ -1,0 +1,59 @@
+name: Gas Report
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [dev, master, main, wrapped-assets]
+  pull_request:
+    branches: [dev, master, main, wrapped-assets]
+    types: [closed]
+
+jobs:
+  test-and-report:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    strategy:
+      matrix:
+        node-version: [16.x]
+        network: ['mainnet', 'polygon']
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+        fetch-depth: 0
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run tests and generate gas report on ${{ matrix.network }}
+      run: npx hardhat test --network ${{ matrix.network }}
+      env:
+        MAINNET_NODE: ${{ secrets.MAINNET_NODE }}
+        GOERLI_NODE: ${{ secrets.GOERLI_NODE }}
+        POLYGON_NODE: ${{ secrets.POLYGON_NODE }}
+        ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+        PRIVATE_KEY: ${{ secrets.DUMMY_PK }}
+        COINMARKETCAP_API_KEY: ${{ secrets.COINMARKETCAP_API_KEY }}
+
+    - name: Move gas report to specific folder
+      run: |
+        mkdir -p gas-reports/${{ matrix.network }}
+        mv gas-report.txt gas-reports/${{ matrix.network }}/gas-report-${GITHUB_SHA}.txt
+
+    - name: Commit gas reports
+      if: github.event.pull_request.merged == true
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add gas-reports/
+        git commit -m "Add gas reports for ${{ matrix.network }} [skip ci]"
+        git push
+
