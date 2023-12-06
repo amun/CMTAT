@@ -3,7 +3,7 @@ require('hardhat-gas-reporter')
 require('solidity-coverage')
 require('solidity-docgen')
 require('@openzeppelin/hardhat-upgrades')
-require('@nomiclabs/hardhat-etherscan')
+require('@nomicfoundation/hardhat-verify')
 require('@nomicfoundation/hardhat-chai-matchers')
 
 module.exports = {
