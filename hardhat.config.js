@@ -1,4 +1,5 @@
 require('dotenv').config()
+require('hardhat-contract-sizer')
 require('hardhat-gas-reporter')
 require('solidity-coverage')
 require('solidity-docgen')
