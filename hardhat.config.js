@@ -33,6 +33,11 @@ module.exports = {
       chainId: 137,
       gasPrice: 450000000000
     },
+    holesky: {
+      url: process.env.HOLESKY_NODE,
+      accounts: [process.env.PRIVATE_KEY],
+      chainId: 17000
+    },
     // mumbai: {
     //   url: process.env.MUMBAI_NODE,
     //   accounts: [process.env.PRIVATE_KEY],
