@@ -20,12 +20,6 @@ module.exports = {
     live: {
       url: 'http://178.25.19.88:80',
       chainId: 1
-      // Add other optional config values here
-    },
-    goerli: {
-      url: process.env.GOERLI_NODE,
-      accounts: [process.env.PRIVATE_KEY],
-      chainId: 5
     },
     polygon: {
       url: process.env.POLYGON_NODE,
@@ -38,12 +32,6 @@ module.exports = {
       accounts: [process.env.PRIVATE_KEY],
       chainId: 17000
     },
-    // mumbai: {
-    //   url: process.env.MUMBAI_NODE,
-    //   accounts: [process.env.PRIVATE_KEY],
-    //   chainId: 80001,
-    //   gasPrice: 70000000000 // (70 gwei)
-    // },
     mainnet: {
       url: process.env.MAINNET_NODE,
       accounts: [process.env.PRIVATE_KEY],
@@ -63,9 +51,7 @@ module.exports = {
     apiKey: {
       mainnet: process.env.ETHERSCAN_API_KEY,
       holesky: process.env.ETHERSCAN_API_KEY,
-      goerli: process.env.ETHERSCAN_API_KEY,
-      polygon: process.env.POLYGONSCAN_API_KEY,
-      polygonMumbai: process.env.POLYGONSCAN_API_KEY
+      polygon: process.env.POLYGONSCAN_API_KEY
     }
   },
   gasReporter: {
