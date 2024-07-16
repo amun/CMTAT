@@ -1,6 +1,6 @@
 //SPDX-License-Identifier: MPL-2.0
 
-pragma solidity 0.8.17;
+pragma solidity 0.8.20;
 
 // required OZ imports here
 import "../../openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol";
@@ -126,14 +126,6 @@ contract CMTAT_BASE is
         returns (bool)
     {
         return ERC20BaseModule.transferFrom(sender, recipient, amount);
-    }
-
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256 amount
-    ) internal view override(ERC20Upgradeable) {
-        if (paused()) revert Errors.InvalidTransfer(from, to, amount);
     }
 
     uint256[50] private __gap;
