@@ -34,7 +34,7 @@ jobs:
         run: npm --version
 
       - name: Install Project Dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run Hardhat Tests
-        run: npx hardhat coverage
+        run: npm run coverage
