@@ -1,5 +1,6 @@
 const { ethers } = require('hardhat')
 const { expect } = require('chai')
+const { CMTAT_DEPLOYER_ROLE } = require('../../utils.js')
 
 describe('Proxy - Factory', function () {
   let admin, attacker, cmtatImplementation, cmtatFactory, deployedCMTAT, deployedFactory, CMTATData
@@ -31,13 +32,13 @@ describe('Proxy - Factory', function () {
 
   context('Deploy CMTAT from Factory', function () {
     it('testCannotBeDeployedByAttacker', async function () {
-      expect(
+      await expect(
         deployedFactory.connect(attacker).deployCMTAT(
           ethers.encodeBytes32String('test'),
           admin.address,
           CMTATData
         )
-      ).to.be.revertedWith('AccessControl')
+      ).to.be.revertedWith('AccessControl: account ' + attacker.address.toLowerCase() + ' is missing role ' + CMTAT_DEPLOYER_ROLE)
     })
 
     it('testCannotDeployCMTATWithFactoryWithSaltAlreadyUsed', async function () {
