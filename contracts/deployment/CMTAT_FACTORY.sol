@@ -2,8 +2,8 @@
 
 pragma solidity 0.8.17;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/utils/Create2.sol";
+import "../../openzeppelin-contracts-upgradeable/contracts/access/AccessControlUpgradeable.sol";
+import "../../openzeppelin-contracts-upgradeable/contracts/utils/Create2Upgradeable.sol";
 import "@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
 import "../modules/CMTAT_BASE.sol";
 import "../libraries/FactoryErrors.sol";
@@ -12,7 +12,7 @@ import "../libraries/FactoryErrors.sol";
 * @notice Factory to deploy CMTAT with a transparent proxy
 * 
 */
-contract CMTAT_FACTORY is AccessControl {
+contract CMTAT_FACTORY is AccessControlUpgradeable {
     /// @dev Role to deploy CMTAT
     bytes32 public constant CMTAT_DEPLOYER_ROLE = keccak256("CMTAT_DEPLOYER_ROLE");
     address public immutable logic;
@@ -76,7 +76,7 @@ contract CMTAT_FACTORY is AccessControl {
         CMTAT_data calldata cmtatData
     ) public view returns (address) {
         bytes memory bytecode = _getBytecode(proxyAdmin, cmtatData);
-        return Create2.computeAddress(
+        return Create2Upgradeable.computeAddress(
             salt,
             keccak256(bytecode),
             address(this)
@@ -134,7 +134,7 @@ contract CMTAT_FACTORY is AccessControl {
         bytes memory bytecode,
         bytes32  deploymentSalt
     ) internal returns (address cmtat) {
-        cmtat = Create2.deploy(0, deploymentSalt, bytecode);
+        cmtat = Create2Upgradeable.deploy(0, deploymentSalt, bytecode);
         cmtats.push(address(cmtat));
         emit CMTATdeployed(cmtat, cmtats.length - 1);
         return cmtat;
