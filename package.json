@@ -91,6 +91,7 @@
     "surya": "^0.4.6"
   },
   "dependencies": {
-    "@metamask/eth-sig-util": "^5.1.0"
+    "@metamask/eth-sig-util": "^5.1.0",
+    "@openzeppelin/contracts": "4.8.1"
   }
 }
