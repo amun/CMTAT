@@ -1,7 +1,7 @@
 const { ethers } = require('hardhat')
 const { expect } = require('chai')
 
-describe('Deploy TP with Factory', function () {
+describe('Proxy - Factory', function () {
   let admin, attacker, cmtatImplementation, cmtatFactory, deployedCMTAT, deployedFactory, CMTATData
 
   beforeEach(async function () {
@@ -29,13 +29,7 @@ describe('Deploy TP with Factory', function () {
     ]
   })
 
-  context('FactoryDeployment', function () {
-    it('testCanReturnTheRightImplementation', async function () {
-      expect(await deployedFactory.connect(admin).logic()).to.be.equal(await deployedCMTAT.getAddress())
-    })
-  })
-
-  context('Deploy CMTAT with Factory', function () {
+  context('Deploy CMTAT from Factory', function () {
     it('testCannotBeDeployedByAttacker', async function () {
       expect(
         deployedFactory.connect(attacker).deployCMTAT(
@@ -44,6 +38,27 @@ describe('Deploy TP with Factory', function () {
           CMTATData
         )
       ).to.be.revertedWith('AccessControl')
+    })
+
+    it('testCannotDeployCMTATWithFactoryWithSaltAlreadyUsed', async function () {
+      const salt = ethers.encodeBytes32String('test')
+
+      await deployedFactory.connect(admin).deployCMTAT(
+        salt,
+        admin,
+        CMTATData
+      )
+
+      await expect(
+        deployedFactory.connect(admin).deployCMTAT(
+          salt,
+          admin.address,
+          CMTATData
+        )
+      ).to.be.revertedWithCustomError(
+        cmtatFactory,
+        'CMTAT_Factory_SaltAlreadyUsed'
+      )
     })
 
     it('testCanDeployCMTATsWithFactory', async function () {
@@ -77,6 +92,20 @@ describe('Deploy TP with Factory', function () {
 
       const proxy1 = await deployedFactory.connect(admin).cmtats(1)
       expect(proxy1).to.be.equal(computedCMTATAddress)
+    })
+
+    it('testEmitCMTATDeployedEvent', async function () {
+      await expect(
+        await deployedFactory.connect(admin).deployCMTAT(
+          ethers.encodeBytes32String('test'),
+          admin,
+          CMTATData
+        )
+      ).to.emit(
+        await deployedFactory.connect(admin), 'CMTATdeployed'
+      ).withArgs(
+        await deployedFactory.connect(admin).cmtats(0), 0
+      )
     })
   })
 })
