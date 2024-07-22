@@ -13,12 +13,7 @@ import "../libraries/FactoryErrors.sol";
 * 
 */
 contract CMTAT_FACTORY is AccessControlUpgradeable {
-    /// @dev Role to deploy CMTAT
-    bytes32 public constant CMTAT_DEPLOYER_ROLE = keccak256("CMTAT_DEPLOYER_ROLE");
-    address public immutable logic;
-    address[] public cmtats;
-    mapping(bytes32 => bool) private salts;
-    
+    /* ============ Structs ============ */
     struct CMTAT_data{
         address admin;
         string nameIrrevocable;
@@ -29,6 +24,21 @@ contract CMTAT_FACTORY is AccessControlUpgradeable {
         string information; 
         uint256 flag;
     }
+
+    /* ============ State Variables ============ */
+    /// @notice Role to deploy CMTAT
+    bytes32 public constant CMTAT_DEPLOYER_ROLE = keccak256("CMTAT_DEPLOYER_ROLE");
+    
+    /// @notice Address of the implementation logic
+    address public immutable logic;
+    
+    /// @notice Array to store the deployed CMTAT addresses
+    address[] public cmtats;
+    
+    /// @notice Mapping to store used custom salts
+    mapping(bytes32 => bool) private salts;
+
+    /* ============ Events ============ */
     event CMTATdeployed(address indexed CMTAT, uint256 id);
 
     /**
@@ -47,23 +57,10 @@ contract CMTAT_FACTORY is AccessControlUpgradeable {
         _grantRole(CMTAT_DEPLOYER_ROLE, factoryAdmin);
     }
     
-    /**
-    * @notice deploy a transparent proxy with a proxy admin contract
-    */
-    function deployCMTAT(
-        bytes32 salt,
-        address proxyAdmin,
-        CMTAT_data calldata cmtatData
-    ) public onlyRole(CMTAT_DEPLOYER_ROLE) returns(address cmtat) {
-        if (salts[salt]) {
-            revert FactoryErrors.CMTAT_Factory_SaltAlreadyUsed();
-        }
-        salts[salt] = true;
-        bytes memory bytecode = _getBytecode(proxyAdmin, cmtatData);
-        cmtat = _deployBytecode(bytecode, salt);
-        return cmtat;
-    }
 
+    /*//////////////////////////////////////////////////////////////////////////
+                         USER-FACING NON-CONSTANT FUNCTIONS
+    //////////////////////////////////////////////////////////////////////////*/
     /**
     * @param salt deployment's salt
     * @param proxyAdmin admin of the proxy
@@ -83,6 +80,32 @@ contract CMTAT_FACTORY is AccessControlUpgradeable {
         );
     }
 
+    /*//////////////////////////////////////////////////////////////
+                 DEPLOYER-FACING NON-CONSTANT FUNCTIONS
+    //////////////////////////////////////////////////////////////*/
+    /**
+    * @param salt deployment's salt
+    * @param proxyAdmin admin of the proxy
+    * @param cmtatData token data used to initialize it
+    * @notice deploy a transparent proxy with a proxy admin contract
+    */
+    function deployCMTAT(
+        bytes32 salt,
+        address proxyAdmin,
+        CMTAT_data calldata cmtatData
+    ) public onlyRole(CMTAT_DEPLOYER_ROLE) returns(address cmtat) {
+        if (salts[salt]) {
+            revert FactoryErrors.CMTAT_Factory_SaltAlreadyUsed();
+        }
+        salts[salt] = true;
+        bytes memory bytecode = _getBytecode(proxyAdmin, cmtatData);
+        cmtat = _deployBytecode(bytecode, salt);
+        return cmtat;
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                            INTERNAL FUNCTIONS
+    //////////////////////////////////////////////////////////////*/
     function _getBytecode(
         address proxyAdmin,
         CMTAT_data calldata cmtatData
