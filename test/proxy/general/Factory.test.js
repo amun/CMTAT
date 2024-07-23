@@ -1,12 +1,12 @@
-const { ethers } = require('hardhat')
+const { ethers, upgrades } = require('hardhat')
 const { expect } = require('chai')
-const { CMTAT_DEPLOYER_ROLE } = require('../../utils.js')
+const { CMTAT_DEPLOYER_ROLE, MINTER_ROLE } = require('../../utils.js')
 
 describe('Proxy - Factory', function () {
-  let admin, attacker, cmtatImplementation, cmtatFactory, deployedCMTAT, deployedFactory, CMTATData
+  let admin, attacker, minter, holder, cmtatImplementation, cmtatFactory, deployedCMTAT, deployedFactory, proxyAdminContract, CMTATData
 
   beforeEach(async function () {
-    [admin, attacker] = await ethers.getSigners()
+    [admin, attacker, minter, holder] = await ethers.getSigners()
 
     cmtatImplementation = await ethers.getContractFactory('CMTAT_BASE')
     cmtatFactory = await ethers.getContractFactory('CMTAT_FACTORY')
@@ -14,12 +14,11 @@ describe('Proxy - Factory', function () {
     deployedCMTAT = await cmtatImplementation.deploy()
     deployedFactory = await cmtatFactory.deploy(
       deployedCMTAT,
-      admin,
-      { from: admin }
+      admin
     )
 
     CMTATData = [
-      admin,
+      admin.address,
       'CMTA Token',
       'CMTAT',
       18,
@@ -28,6 +27,8 @@ describe('Proxy - Factory', function () {
       'CMTAT_info',
       5
     ]
+
+    proxyAdminContract = await upgrades.deployProxyAdmin(admin)
   })
 
   context('Deploy CMTAT from Factory', function () {
@@ -53,7 +54,7 @@ describe('Proxy - Factory', function () {
       await expect(
         deployedFactory.connect(admin).deployCMTAT(
           salt,
-          admin.address,
+          admin,
           CMTATData
         )
       ).to.be.revertedWithCustomError(
@@ -68,26 +69,32 @@ describe('Proxy - Factory', function () {
 
       let computedCMTATAddress = await deployedFactory.connect(admin).computeProxyAddress(
         salt0,
-        admin.address,
+        proxyAdminContract,
         CMTATData
       )
       await deployedFactory.connect(admin).deployCMTAT(
         salt0,
-        admin,
+        proxyAdminContract,
         CMTATData
       )
 
       const proxy0 = await deployedFactory.connect(admin).cmtats(0)
       expect(proxy0).to.be.equal(computedCMTATAddress)
 
+      const deployedCMTATContract = cmtatImplementation.attach(computedCMTATAddress)
+      expect(await deployedCMTATContract.connect(admin).decimals()).to.be.equal(18)
+      await deployedCMTATContract.connect(admin).grantRole(MINTER_ROLE, minter)
+      await deployedCMTATContract.connect(minter).mint(holder, 10)
+      expect(await deployedCMTATContract.connect(holder).balanceOf(holder)).to.be.equal(10)
+
       computedCMTATAddress = await deployedFactory.connect(admin).computeProxyAddress(
         salt1,
-        admin,
+        proxyAdminContract,
         CMTATData
       )
       await deployedFactory.connect(admin).deployCMTAT(
         salt1,
-        admin,
+        proxyAdminContract,
         CMTATData
       )
 

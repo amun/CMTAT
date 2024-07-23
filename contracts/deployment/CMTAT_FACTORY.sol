@@ -110,7 +110,7 @@ contract CMTAT_FACTORY is AccessControlUpgradeable {
         address proxyAdmin,
         CMTAT_data calldata cmtatData
     ) internal view returns(bytes memory bytecode) {
-        bytes memory implementation = _encodeImplementationData(
+        bytes memory implementationData = _encodeImplementationData(
             cmtatData.admin,
             cmtatData.nameIrrevocable,
             cmtatData.symbolIrrevocable,
@@ -125,7 +125,7 @@ contract CMTAT_FACTORY is AccessControlUpgradeable {
             abi.encode(
                 logic,
                 proxyAdmin,
-                implementation
+                implementationData
             )
         );
     }
@@ -155,9 +155,9 @@ contract CMTAT_FACTORY is AccessControlUpgradeable {
 
     function _deployBytecode(
         bytes memory bytecode,
-        bytes32  deploymentSalt
+        bytes32 salt
     ) internal returns (address cmtat) {
-        cmtat = Create2Upgradeable.deploy(0, deploymentSalt, bytecode);
+        cmtat = Create2Upgradeable.deploy(0, salt, bytecode);
         cmtats.push(address(cmtat));
         emit CMTATdeployed(cmtat, cmtats.length - 1);
         return cmtat;

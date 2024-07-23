@@ -18,7 +18,7 @@ describe('CMTAT_FACTORY Deployment', function () {
 
   it('testCannotDeployIfImplementationIsZero', async function () {
     await expect(
-      cmtatFactory.deploy(ZERO_ADDRESS, admin, { from: admin })
+      cmtatFactory.deploy(ZERO_ADDRESS, admin)
     ).to.be.revertedWithCustomError(
       cmtatFactory,
       'CMTAT_Factory_AddressZeroNotAllowedForLogicContract'
@@ -27,7 +27,7 @@ describe('CMTAT_FACTORY Deployment', function () {
 
   it('testCannotDeployIfFactoryAdminIsZero', async function () {
     await expect(
-      cmtatFactory.deploy(deployedCMTAT, ZERO_ADDRESS, { from: admin })
+      cmtatFactory.deploy(deployedCMTAT, ZERO_ADDRESS)
     ).to.be.revertedWithCustomError(
       cmtatFactory,
       'CMTAT_Factory_AddressZeroNotAllowedForFactoryAdmin'
