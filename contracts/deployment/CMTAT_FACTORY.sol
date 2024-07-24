@@ -73,10 +73,15 @@ contract CMTAT_FACTORY is AccessControlUpgradeable {
         CMTAT_data calldata cmtatData
     ) public view returns (address) {
         bytes memory bytecode = _getBytecode(proxyAdmin, cmtatData);
+        bytes32 encodedSaltWithSender = keccak256(
+            abi.encodePacked(
+                msg.sender,
+                salt
+            )
+        );
         return Create2Upgradeable.computeAddress(
-            salt,
-            keccak256(bytecode),
-            address(this)
+            encodedSaltWithSender,
+            keccak256(bytecode)
         );
     }
 
@@ -94,12 +99,18 @@ contract CMTAT_FACTORY is AccessControlUpgradeable {
         address proxyAdmin,
         CMTAT_data calldata cmtatData
     ) public onlyRole(CMTAT_DEPLOYER_ROLE) returns(address cmtat) {
-        if (salts[salt]) {
+        bytes32 encodedSaltWithSender = keccak256(
+            abi.encodePacked(
+                msg.sender,
+                salt
+            )
+        );
+        if (salts[encodedSaltWithSender]) {
             revert FactoryErrors.CMTAT_Factory_SaltAlreadyUsed();
         }
-        salts[salt] = true;
+        salts[encodedSaltWithSender] = true;
         bytes memory bytecode = _getBytecode(proxyAdmin, cmtatData);
-        cmtat = _deployBytecode(bytecode, salt);
+        cmtat = _deployBytecode(bytecode, encodedSaltWithSender);
         return cmtat;
     }
 
