@@ -10,13 +10,13 @@ async function getAdminAddress () {
 function getInitializerArguments (admin) {
   return [
     admin, // Admin address
-    '21.co Wrapped Bitcoin',
-    '21BTC',
-    8,
-    '',
-    '',
-    '',
-    0
+    'Test CMTA Token', // nameIrrevocable
+    'TCMTAT', // symbolIrrevocable
+    18, // decimalsIrrevocable
+    'TCMTAT_ISIN', // tokenId
+    'https://cmta.ch', // terms
+    'TCMTAT_info', // information
+    0 // flag
   ]
 }
 

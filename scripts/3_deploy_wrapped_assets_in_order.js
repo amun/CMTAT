@@ -1,9 +1,9 @@
 require('dotenv').config()
 const { ethers, upgrades } = require('hardhat')
 const {
-  getInitializerArguments,
   printBoxedTitle
 } = require('./utils')
+const tokensMetadata = require('./wrapped-tokens.json');
 
 async function deployWrappedAssets () {
   printBoxedTitle('Deploying WRAPPED ASSETS to new network')
@@ -28,7 +28,7 @@ async function deployWrappedAssets () {
     })
   }
 
-  // // Deploy Implementation as nonce 8
+  // Deploy Implementation as nonce 8
   const CMTATBase = await ethers.getContractFactory('CMTAT_BASE')
   const deployedImplementation = await upgrades.deployImplementation(CMTATBase)
   console.log('Implementation', deployedImplementation)
@@ -36,7 +36,7 @@ async function deployWrappedAssets () {
   // Deploy 21BTC as nonce 9
   const proxyContract = await upgrades.deployProxy(
     CMTATBase,
-    getInitializerArguments(deployer.address),
+    tokensMetadata.tokens[0]['0x3f67093dfFD4F0aF4f2918703C92B60ACB7AD78b'].metadata,
     { initializer: 'initialize' }
   )
 
