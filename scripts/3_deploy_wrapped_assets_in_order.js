@@ -28,10 +28,10 @@ async function deployWrappedAssets () {
     })
   }
 
-  // Deploy Implementation as nonce 8
+  // // Deploy Implementation as nonce 8
   const CMTATBase = await ethers.getContractFactory('CMTAT_BASE')
   const deployedImplementation = await upgrades.deployImplementation(CMTATBase)
-  console.log('Implementation', await deployedImplementation.getAddress())
+  console.log('Implementation', deployedImplementation)
 
   // Deploy 21BTC as nonce 9
   const proxyContract = await upgrades.deployProxy(
