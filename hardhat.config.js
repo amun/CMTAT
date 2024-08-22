@@ -42,12 +42,27 @@ module.exports = {
       accounts: [process.env.PRIVATE_KEY],
       chainId: 11155111
     },
+    arbitrum: {
+      url: process.env.ARBITRUM_NODE,
+      accounts: [process.env.PRIVATE_KEY],
+      chainId: 42161
+    },
     arbitrumTestnet: {
       url: process.env.ARBITRUMTESTNET_NODE,
       accounts: [process.env.PRIVATE_KEY],
       chainId: 421614
     },
+    base: {
+      url: process.env.BASE_NODE,
+      accounts: [process.env.PRIVATE_KEY],
+      chainId: 8453
+    },
     baseTestnet: {
+      url: process.env.BASETESTNET_NODE,
+      accounts: [process.env.PRIVATE_KEY],
+      chainId: 84532
+    },
+    bsc: {
       url: process.env.BASETESTNET_NODE,
       accounts: [process.env.PRIVATE_KEY],
       chainId: 84532
