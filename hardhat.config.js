@@ -83,7 +83,9 @@ module.exports = {
       holesky: process.env.ETHERSCAN_API_KEY,
       polygon: process.env.POLYGONSCAN_API_KEY,
       sepolia: process.env.ETHERSCAN_API_KEY,
+      arbitrumOne: process.env.ARBISCAN_API_KEY,
       arbitrumTestnet: process.env.ARBISCAN_API_KEY,
+      base: process.env.BASESCAN_API_KEY,
       baseTestnet: process.env.BASESCAN_API_KEY
     },
     customChains: [
