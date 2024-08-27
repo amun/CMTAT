@@ -86,7 +86,8 @@ module.exports = {
       arbitrumOne: process.env.ARBISCAN_API_KEY,
       arbitrumTestnet: process.env.ARBISCAN_API_KEY,
       base: process.env.BASESCAN_API_KEY,
-      baseTestnet: process.env.BASESCAN_API_KEY
+      baseTestnet: process.env.BASESCAN_API_KEY,
+      bsc: process.env.BSCSCAN_API_KEY
     },
     customChains: [
       {
