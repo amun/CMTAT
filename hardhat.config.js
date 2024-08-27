@@ -63,9 +63,9 @@ module.exports = {
       chainId: 84532
     },
     bsc: {
-      url: process.env.BASETESTNET_NODE,
+      url: process.env.BSC_NODE,
       accounts: [process.env.PRIVATE_KEY],
-      chainId: 84532
+      chainId: 56
     }
   },
   solidity: {
