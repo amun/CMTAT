@@ -91,6 +91,11 @@ module.exports = {
       url: process.env.LINEA_NODE,
       accounts: [process.env.PRIVATE_KEY],
       chainId: 59144
+    },
+    mantle: {
+      url: process.env.MANTLE_NODE,
+      accounts: [process.env.PRIVATE_KEY],
+      chainId: 5000
     }
   },
   solidity: {
@@ -117,7 +122,8 @@ module.exports = {
       blast: process.env.BLASTSCAN_API_KEY,
       scroll: process.env.SCROLLSCAN_API_KEY,
       avalanche: process.env.AVASCAN_API_KEY,
-      linea: process.env.LINEASCAN_API_KEY
+      linea: process.env.LINEASCAN_API_KEY,
+      mantle: process.env.MANTLESCAN_API_KEY
     },
     customChains: [
       {
@@ -166,6 +172,14 @@ module.exports = {
         urls: {
           apiURL: 'https://api.lineascan.build/api',
           browserURL: 'https://lineascan.build'
+        }
+      },
+      {
+        network: 'mantle',
+        chainId: 5000,
+        urls: {
+          apiURL: 'https://explorer.mantle.xyz:443/api',
+          browserURL: 'https://explorer.mantle.xyz'
         }
       }
     ]
